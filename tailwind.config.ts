@@ -70,7 +70,7 @@ export default {
 			},
 			backgroundImage: {
 				'gradient-primary': 'var(--gradient-primary)',
-				'gradient-coffee': 'var(--gradient-coffee)',
+				'gradient-morisco': 'var(--gradient-morisco)',
 				'gradient-gold': 'var(--gradient-gold)',
 				'gradient-warm': 'var(--gradient-warm)',
 			},

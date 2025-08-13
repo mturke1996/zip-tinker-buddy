@@ -8,47 +8,47 @@
 
 @layer base {
   :root {
-    /* Coffee-inspired color palette */
-    --background: 45 6% 97%;
-    --foreground: 27 15% 8%;
+    /* Morisco Green-inspired color palette */
+    --background: 120 8% 97%;
+    --foreground: 160 15% 8%;
 
     --card: 0 0% 100%;
-    --card-foreground: 27 15% 8%;
+    --card-foreground: 160 15% 8%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 27 15% 8%;
+    --popover-foreground: 160 15% 8%;
 
-    /* Rich coffee primary colors */
-    --primary: 30 45% 35%;
-    --primary-foreground: 45 25% 95%;
-    --primary-glow: 30 55% 45%;
+    /* Rich Morisco green primary colors */
+    --primary: 158 65% 25%;
+    --primary-foreground: 120 25% 95%;
+    --primary-glow: 158 75% 35%;
 
     /* Warm secondary */
-    --secondary: 45 15% 92%;
-    --secondary-foreground: 30 25% 25%;
+    --secondary: 120 15% 92%;
+    --secondary-foreground: 158 25% 25%;
 
-    /* Muted coffee tones */
-    --muted: 35 10% 88%;
-    --muted-foreground: 30 8% 45%;
+    /* Muted green tones */
+    --muted: 125 10% 88%;
+    --muted-foreground: 150 8% 45%;
 
-    /* Accent - warm gold */
-    --accent: 42 88% 65%;
-    --accent-foreground: 27 25% 15%;
+    /* Accent - bright morisco green */
+    --accent: 158 85% 45%;
+    --accent-foreground: 160 25% 15%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 35 12% 88%;
-    --input: 35 12% 90%;
-    --ring: 30 45% 35%;
+    --border: 125 12% 88%;
+    --input: 125 12% 90%;
+    --ring: 158 65% 25%;
 
     --radius: 0.75rem;
 
-    /* Coffee gradients */
+    /* Morisco gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-coffee: linear-gradient(180deg, hsl(30 45% 25%), hsl(25 35% 15%));
-    --gradient-gold: linear-gradient(135deg, hsl(42 88% 65%), hsl(45 75% 55%));
-    --gradient-warm: linear-gradient(180deg, hsl(45 25% 95%), hsl(40 15% 92%));
+    --gradient-morisco: linear-gradient(180deg, hsl(158 65% 25%), hsl(152 55% 15%));
+    --gradient-gold: linear-gradient(135deg, hsl(158 85% 45%), hsl(150 75% 55%));
+    --gradient-warm: linear-gradient(180deg, hsl(120 25% 95%), hsl(125 15% 92%));
 
     /* Elegant shadows */
     --shadow-soft: 0 2px 8px hsl(30 25% 25% / 0.08);
@@ -61,60 +61,60 @@
     --transition-bounce: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 
     /* Sidebar */
-    --sidebar-background: 30 25% 25%;
-    --sidebar-foreground: 45 25% 90%;
-    --sidebar-primary: 42 88% 65%;
-    --sidebar-primary-foreground: 27 25% 15%;
-    --sidebar-accent: 30 15% 35%;
-    --sidebar-accent-foreground: 45 25% 90%;
-    --sidebar-border: 30 20% 30%;
-    --sidebar-ring: 42 88% 65%;
+    --sidebar-background: 158 25% 25%;
+    --sidebar-foreground: 120 25% 90%;
+    --sidebar-primary: 158 85% 45%;
+    --sidebar-primary-foreground: 160 25% 15%;
+    --sidebar-accent: 158 15% 35%;
+    --sidebar-accent-foreground: 120 25% 90%;
+    --sidebar-border: 158 20% 30%;
+    --sidebar-ring: 158 85% 45%;
   }
 
   .dark {
-    --background: 27 15% 8%;
-    --foreground: 45 25% 95%;
+    --background: 160 15% 8%;
+    --foreground: 120 25% 95%;
 
-    --card: 30 20% 12%;
-    --card-foreground: 45 25% 95%;
+    --card: 158 20% 12%;
+    --card-foreground: 120 25% 95%;
 
-    --popover: 30 20% 12%;
-    --popover-foreground: 45 25% 95%;
+    --popover: 158 20% 12%;
+    --popover-foreground: 120 25% 95%;
 
-    --primary: 42 88% 65%;
-    --primary-foreground: 27 25% 15%;
-    --primary-glow: 42 95% 75%;
+    --primary: 158 85% 45%;
+    --primary-foreground: 160 25% 15%;
+    --primary-glow: 158 95% 55%;
 
-    --secondary: 30 15% 18%;
-    --secondary-foreground: 45 25% 90%;
+    --secondary: 158 15% 18%;
+    --secondary-foreground: 120 25% 90%;
 
-    --muted: 30 12% 15%;
-    --muted-foreground: 40 8% 65%;
+    --muted: 158 12% 15%;
+    --muted-foreground: 150 8% 65%;
 
-    --accent: 45 85% 70%;
-    --accent-foreground: 27 25% 15%;
+    --accent: 158 85% 55%;
+    --accent-foreground: 160 25% 15%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 30 15% 18%;
-    --input: 30 15% 20%;
-    --ring: 42 88% 65%;
+    --border: 158 15% 18%;
+    --input: 158 15% 20%;
+    --ring: 158 85% 45%;
 
     /* Dark gradients */
     --gradient-primary: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--primary-glow)));
-    --gradient-coffee: linear-gradient(180deg, hsl(25 25% 15%), hsl(20 20% 8%));
-    --gradient-gold: linear-gradient(135deg, hsl(42 88% 65%), hsl(45 95% 75%));
-    --gradient-warm: linear-gradient(180deg, hsl(30 20% 12%), hsl(25 15% 10%));
+    --gradient-morisco: linear-gradient(180deg, hsl(152 25% 15%), hsl(148 20% 8%));
+    --gradient-gold: linear-gradient(135deg, hsl(158 85% 45%), hsl(150 95% 55%));
+    --gradient-warm: linear-gradient(180deg, hsl(158 20% 12%), hsl(152 15% 10%));
 
-    --sidebar-background: 25 20% 10%;
-    --sidebar-foreground: 45 25% 90%;
-    --sidebar-primary: 42 88% 65%;
-    --sidebar-primary-foreground: 27 25% 15%;
-    --sidebar-accent: 30 15% 15%;
-    --sidebar-accent-foreground: 45 25% 90%;
-    --sidebar-border: 30 15% 15%;
-    --sidebar-ring: 42 88% 65%;
+    --sidebar-background: 152 20% 10%;
+    --sidebar-foreground: 120 25% 90%;
+    --sidebar-primary: 158 85% 45%;
+    --sidebar-primary-foreground: 160 25% 15%;
+    --sidebar-accent: 158 15% 15%;
+    --sidebar-accent-foreground: 120 25% 90%;
+    --sidebar-border: 158 15% 15%;
+    --sidebar-ring: 158 85% 45%;
   }
 }
 

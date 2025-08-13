@@ -35,8 +35,12 @@ const Index = () => {
         <div className="w-full max-w-md space-y-8">
           {/* Header Section */}
           <div className="text-center animate-fade-in">
-            <div className="mx-auto w-20 h-20 bg-gradient-primary rounded-2xl flex items-center justify-center mb-6 shadow-medium animate-glow">
-              <Coffee className="w-10 h-10 text-primary-foreground" />
+            <div className="mx-auto w-24 h-24 rounded-2xl flex items-center justify-center mb-6 shadow-medium animate-glow overflow-hidden">
+              <img 
+                src="/lovable-uploads/b4854dd5-f780-45c3-b27d-0383a7c9abe0.png" 
+                alt="موريسكو كافيه" 
+                className="w-full h-full object-contain"
+              />
             </div>
             <h1 className="text-3xl font-bold text-foreground mb-2">موريسكو كافيه</h1>
             <p className="text-muted-foreground font-medium">لوحة إدارة احترافية وسريعة</p>
@@ -101,10 +105,10 @@ const Index = () => {
                       جاري التحميل...
                     </div>
                   ) : (
-                    <>
+                    <div className="flex items-center gap-2">
                       <Shield className="w-4 h-4 ml-2" />
                       دخول
-                    </>
+                    </div>
                   )}
                 </Button>
               </form>
