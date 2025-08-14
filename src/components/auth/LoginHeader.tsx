@@ -1,22 +1,21 @@
-import { Badge } from "@/components/ui/badge";
-import { Sparkles } from "lucide-react";
-
 export const LoginHeader = () => {
   return (
-    <div className="text-center animate-fade-in">
-      <div className="mx-auto w-24 h-24 rounded-2xl flex items-center justify-center mb-6 shadow-medium animate-glow overflow-hidden">
+    <div className="login-header">
+      <div className="logo-container">
         <img 
           src="/lovable-uploads/b4854dd5-f780-45c3-b27d-0383a7c9abe0.png" 
           alt="موريسكو كافيه" 
-          className="w-full h-full object-contain"
+          className="logo-image"
         />
       </div>
-      <h1 className="text-3xl font-bold text-foreground mb-2">موريسكو كافيه</h1>
-      <p className="text-muted-foreground font-medium">لوحة إدارة احترافية وسريعة</p>
-      <Badge variant="secondary" className="mt-3 bg-accent/20 text-accent-foreground border-accent/30">
-        <Sparkles className="w-3 h-3 ml-1" />
+      <h1 className="main-title">موريسكو كافيه</h1>
+      <p className="subtitle">لوحة إدارة احترافية وسريعة</p>
+      <div className="badge">
+        <svg className="badge-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 3l14 9-14 9V3z" />
+        </svg>
         نسخة محدثة
-      </Badge>
+      </div>
     </div>
   );
 };

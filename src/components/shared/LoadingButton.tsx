@@ -1,13 +1,10 @@
-import { Button } from "@/components/ui/button";
 import { LoadingSpinner } from "./LoadingSpinner";
-import { cn } from "@/lib/utils";
 
 interface LoadingButtonProps {
   isLoading: boolean;
   loadingText: string;
   children: React.ReactNode;
-  variant?: "default" | "outline" | "secondary" | "ghost" | "link" | "destructive";
-  className?: string;
+  variant?: "primary" | "outline" | "secondary";
   onClick?: () => void;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
@@ -17,28 +14,28 @@ export const LoadingButton = ({
   isLoading,
   loadingText,
   children,
-  variant = "default",
-  className,
+  variant = "primary",
   onClick,
   type = "button",
   disabled
 }: LoadingButtonProps) => {
+  const buttonClass = `button ${variant === "primary" ? "button-primary" : variant === "outline" ? "button-outline" : "button-secondary"}`;
+
   return (
-    <Button
+    <button
       type={type}
-      variant={variant}
-      className={cn("w-full h-11 font-medium", className)}
+      className={buttonClass}
       onClick={onClick}
       disabled={isLoading || disabled}
     >
       {isLoading ? (
-        <div className="flex items-center gap-2">
-          <LoadingSpinner size="md" />
+        <div className="loading-content">
+          <LoadingSpinner />
           {loadingText}
         </div>
       ) : (
         children
       )}
-    </Button>
+    </button>
   );
 };
