@@ -1,22 +1,34 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { LoginHeader } from "@/components/auth/LoginHeader";
 import { LoginForm } from "@/components/auth/LoginForm";
 import { BackgroundDecorations } from "@/components/layout/BackgroundDecorations";
+import { toast } from "sonner";
 
 const Index = () => {
   const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    // Simulate loading
-    setTimeout(() => setIsLoading(false), 2000);
+    
+    // Simulate login process
+    setTimeout(() => {
+      setIsLoading(false);
+      toast.success("تم تسجيل الدخول بنجاح!");
+      navigate("/dashboard");
+    }, 2000);
   };
 
   const handleDemoLogin = () => {
     setIsLoading(true);
-    setTimeout(() => setIsLoading(false), 1500);
+    setTimeout(() => {
+      setIsLoading(false);
+      toast.success("تم الدخول التجريبي بنجاح!");
+      navigate("/dashboard");
+    }, 1500);
   };
 
   return (
