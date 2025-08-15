@@ -28,7 +28,7 @@ const Index = () => {
           <LoginHeader />
 
           {/* Login Card */}
-          <Card className="shadow-strong border-border/50 backdrop-blur-sm bg-card/95 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+          <Card className="shadow-strong border-border/50 backdrop-blur-sm bg-card/95 animate-fade-in animate-delay-200">
             <CardHeader className="space-y-1 pb-6">
               <CardTitle className="text-2xl font-bold text-center text-foreground">تسجيل الدخول</CardTitle>
               <CardDescription className="text-center text-muted-foreground">
@@ -45,7 +45,7 @@ const Index = () => {
           </Card>
 
           {/* Footer */}
-          <div className="text-center text-sm text-muted-foreground animate-fade-in" style={{ animationDelay: '0.4s' }}>
+          <div className="text-center text-sm text-muted-foreground animate-fade-in animate-delay-400">
             <p>© 2024 موريسكو كافيه. جميع الحقوق محفوظة.</p>
           </div>
         </div>

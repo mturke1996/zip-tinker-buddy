@@ -19,7 +19,15 @@ export const LoadingButton = ({
   type = "button",
   disabled
 }: LoadingButtonProps) => {
-  const buttonClass = `button ${variant === "primary" ? "button-primary" : variant === "outline" ? "button-outline" : "button-secondary"}`;
+  const baseClasses = "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all cursor-pointer border-none w-full h-11";
+  
+  const variantClasses = {
+    primary: "bg-gradient-primary text-primary-foreground hover:shadow-glow",
+    outline: "border border-border/80 bg-background text-foreground hover:bg-accent/10 hover:border-accent/50",
+    secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+  };
+
+  const buttonClass = `${baseClasses} ${variantClasses[variant]} ${(isLoading || disabled) ? "opacity-50 pointer-events-none" : ""}`;
 
   return (
     <button
@@ -29,7 +37,7 @@ export const LoadingButton = ({
       disabled={isLoading || disabled}
     >
       {isLoading ? (
-        <div className="loading-content">
+        <div className="flex items-center gap-2">
           <LoadingSpinner />
           {loadingText}
         </div>
