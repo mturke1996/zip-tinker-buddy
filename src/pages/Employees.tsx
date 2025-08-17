@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { UserPlus, Search, User, Phone, Calendar, DollarSign, Clock, CheckCircle, XCircle } from "lucide-react";
 import { supabase, type Employee, type Attendance, type EmployeeWithdrawal } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
+import { Layout } from "@/components/shared/Layout";
 
 export const Employees = () => {
   const [employees, setEmployees] = useState<Employee[]>([]);
@@ -133,7 +134,8 @@ export const Employees = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-warm p-6" dir="rtl">
+    <Layout>
+      <div className="p-6">
       <div className="container mx-auto max-w-7xl">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
@@ -353,7 +355,8 @@ export const Employees = () => {
             </DialogContent>
           </Dialog>
         )}
+        </div>
       </div>
-    </div>
+    </Layout>
   );
 };
