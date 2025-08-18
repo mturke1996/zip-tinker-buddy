@@ -1,215 +1,222 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Layout } from "@/components/shared/Layout";
+import { Coffee, Users, Clock, DollarSign, FileText, CreditCard, BarChart3, Settings } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { 
-  Coffee, 
-  Users, 
-  Clock, 
-  Receipt, 
-  CreditCard, 
-  BarChart3,
-  ArrowRight,
-  TrendingUp,
-  CalendarCheck,
-  Wallet
-} from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { useEffect, useState } from "react";
 
 const Index = () => {
   const navigate = useNavigate();
+  const [stats, setStats] = useState({
+    employees: 0,
+    todayAttendance: 0,
+    totalExpenses: 0,
+    totalDebts: 0
+  });
 
-  const handleNavigation = (path: string) => {
-    navigate(path);
-  };
-
-  // Sample statistics for the coffee shop
-  const stats = [
-    { title: "الموظفين", value: "12", icon: Users, trend: "+2 هذا الشهر" },
-    { title: "الحضور اليوم", value: "10", icon: CalendarCheck, trend: "83% معدل الحضور" },
-    { title: "المصروفات اليومية", value: "1,250 ريال", icon: Wallet, trend: "-5% عن أمس" },
-    { title: "الديون المعلقة", value: "8,500 ريال", value_count: "من 15 عميل", icon: CreditCard, trend: "تحتاج متابعة" },
-  ];
-
-  const quickActions = [
+  const features = [
     {
-      title: "إدارة الموظفين",
-      description: "عرض وإدارة بيانات الموظفين",
       icon: Users,
+      title: "إدارة الموظفين",
+      description: "متابعة الموظفين وملفاتهم الشخصية والرواتب",
       path: "/employees",
-      color: "bg-primary",
-      badge: "12 موظف"
+      gradient: "from-blue-500 to-blue-600"
     },
     {
-      title: "تسجيل الحضور",
-      description: "متابعة حضور وغياب الموظفين",
       icon: Clock,
-      path: "/attendance",
-      color: "bg-accent",
-      badge: "10 حاضر اليوم"
+      title: "الحضور والغياب",
+      description: "تسجيل حضور الموظفين وتتبع أوقات العمل",
+      path: "/attendance", 
+      gradient: "from-green-500 to-green-600"
     },
     {
-      title: "المصروفات",
-      description: "تسجيل ومتابعة المصروفات اليومية",
-      icon: Receipt,
+      icon: DollarSign,
+      title: "المصروفات اليومية",
+      description: "تسجيل ومتابعة مصروفات المقهى",
       path: "/expenses",
-      color: "bg-secondary",
-      badge: "5 عمليات اليوم"
+      gradient: "from-orange-500 to-orange-600"
     },
     {
-      title: "ديون العملاء",
-      description: "إدارة ومتابعة ديون العملاء",
       icon: CreditCard,
+      title: "العملاء والديون",
+      description: "إدارة ديون العملاء والمدفوعات",
       path: "/customers",
-      color: "bg-muted",
-      badge: "15 عميل"
+      gradient: "from-purple-500 to-purple-600"
     },
     {
-      title: "التقارير",
-      description: "استخراج التقارير المالية والإدارية",
-      icon: BarChart3,
+      icon: FileText,
+      title: "التقارير المالية",
+      description: "تقارير شاملة وتصدير PDF احترافي",
       path: "/reports",
-      color: "bg-primary-glow",
-      badge: "PDF"
+      gradient: "from-red-500 to-red-600"
     },
     {
+      icon: BarChart3,
       title: "لوحة التحكم",
-      description: "عرض شامل للأداء والإحصائيات",
-      icon: TrendingUp,
+      description: "عرض شامل للإحصائيات والبيانات",
       path: "/dashboard",
-      color: "bg-accent",
-      badge: "تحليلات"
+      gradient: "from-indigo-500 to-indigo-600"
+    },
+    {
+      icon: Settings,
+      title: "إعدادات النظام",
+      description: "تخصيص النظام وإعدادات المقهى",
+      path: "/settings",
+      gradient: "from-gray-500 to-gray-600"
     }
   ];
 
+  useEffect(() => {
+    fetchStats();
+  }, []);
+
+  const fetchStats = async () => {
+    try {
+      // Get employees count
+      const { count: employeesCount } = await supabase
+        .from('employees')
+        .select('*', { count: 'exact', head: true });
+
+      // Get today's attendance
+      const today = new Date().toISOString().split('T')[0];
+      const { count: attendanceCount } = await supabase
+        .from('attendance')
+        .select('*', { count: 'exact', head: true })
+        .eq('date', today)
+        .eq('status', 'present');
+
+      // Get total expenses for current month
+      const startOfMonth = new Date(new Date().getFullYear(), new Date().getMonth(), 1).toISOString().split('T')[0];
+      const { data: expenses } = await supabase
+        .from('expenses')
+        .select('amount')
+        .gte('date', startOfMonth);
+
+      const totalExpenses = expenses?.reduce((sum, expense) => sum + expense.amount, 0) || 0;
+
+      // Get total pending debts
+      const { data: debts } = await supabase
+        .from('debts')
+        .select('amount, paid_amount')
+        .neq('status', 'paid');
+
+      const totalDebts = debts?.reduce((sum, debt) => sum + (debt.amount - debt.paid_amount), 0) || 0;
+
+      setStats({
+        employees: employeesCount || 0,
+        todayAttendance: attendanceCount || 0,
+        totalExpenses,
+        totalDebts
+      });
+    } catch (error) {
+      console.error('Error fetching stats:', error);
+    }
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-warm font-arabic" dir="rtl">
-      {/* Header */}
-      <div className="bg-gradient-primary text-primary-foreground">
-        <div className="container mx-auto px-6 py-8">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <Coffee className="h-10 w-10" />
-              <div>
-                <h1 className="text-3xl font-bold">موريسكو كافيه</h1>
-                <p className="text-primary-foreground/80">نظام إدارة احترافي</p>
-              </div>
+    <Layout>
+      {/* Hero Section */}
+      <div className="relative overflow-hidden bg-gradient-primary text-primary-foreground">
+        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMSkiPjxwYXRoIGQ9Ik0zMCAzMGMwLTE2LjU2OS0xMy40MzEtMzAtMzAtMzB2NjBjMTYuNTY5IDAgMzAtMTMuNDMxIDMwLTMweiIvPjwvZz48L3N2Zz4=')] opacity-20"></div>
+        <div className="relative container mx-auto px-6 py-20 text-center">
+          <div className="flex items-center justify-center mb-6 animate-fade-in">
+            <Coffee className="w-20 h-20 ml-6 animate-float" />
+            <div>
+              <h1 className="text-6xl font-bold mb-2 font-arabic">مور بيريسكو</h1>
+              <p className="text-2xl text-primary-foreground/90 font-arabic">كافيه</p>
             </div>
-            <div className="text-left">
-              <p className="text-sm text-primary-foreground/80">مرحباً بك</p>
-              <p className="font-semibold">مدير المقهى</p>
-            </div>
+          </div>
+          <p className="text-xl mb-8 text-primary-foreground/90 max-w-3xl mx-auto animate-fade-in animate-delay-200 font-arabic">
+            نظام إدارة متكامل وشامل للمقهى - إدارة الموظفين، المصروفات، الديون والتقارير المالية
+          </p>
+          <Button 
+            onClick={() => navigate('/dashboard')}
+            size="lg"
+            variant="secondary"
+            className="animate-fade-in animate-delay-400 text-lg px-8 py-3 font-arabic"
+          >
+            ابدأ الآن
+          </Button>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div className="bg-background/50 py-12 -mt-8 relative z-10">
+        <div className="container mx-auto px-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { title: "إجمالي الموظفين", value: stats.employees, icon: Users, color: "text-blue-600" },
+              { title: "الحضور اليوم", value: stats.todayAttendance, icon: Clock, color: "text-green-600" },
+              { title: "مصروفات الشهر", value: `${stats.totalExpenses.toLocaleString()} ر.س`, icon: DollarSign, color: "text-orange-600" },
+              { title: "إجمالي الديون", value: `${stats.totalDebts.toLocaleString()} ر.س`, icon: CreditCard, color: "text-red-600" }
+            ].map((stat, index) => {
+              const IconComponent = stat.icon;
+              return (
+                <Card key={stat.title} className="text-center p-6 shadow-soft hover:shadow-strong transition-all duration-300 border-0">
+                  <IconComponent className={`w-8 h-8 mx-auto mb-4 ${stat.color}`} />
+                  <p className="text-2xl font-bold text-foreground mb-2 font-arabic">{stat.value}</p>
+                  <p className="text-muted-foreground text-sm font-arabic">{stat.title}</p>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </div>
 
-      <div className="container mx-auto px-6 py-8">
-        {/* Statistics Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-          {stats.map((stat, index) => (
-            <Card key={index} className="shadow-soft hover:shadow-strong transition-shadow">
-              <CardContent className="p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-sm text-muted-foreground mb-1">{stat.title}</p>
-                    <p className="text-2xl font-bold text-foreground">{stat.value}</p>
-                    {stat.value_count && (
-                      <p className="text-sm text-muted-foreground">{stat.value_count}</p>
-                    )}
-                    <p className="text-xs text-accent mt-1">{stat.trend}</p>
-                  </div>
-                  <div className="p-3 bg-primary/10 rounded-lg">
-                    <stat.icon className="h-6 w-6 text-primary" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
-
-        {/* Quick Actions */}
-        <div className="mb-8">
-          <h2 className="text-2xl font-bold text-foreground mb-6">الإجراءات السريعة</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {quickActions.map((action, index) => (
+      {/* Features Grid */}
+      <div className="container mx-auto px-6 py-16">
+        <h2 className="text-4xl font-bold text-center mb-12 text-foreground font-arabic">
+          أقسام النظام
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {features.map((feature, index) => {
+            const IconComponent = feature.icon;
+            return (
               <Card 
-                key={index} 
-                className="shadow-soft hover:shadow-strong transition-all duration-300 cursor-pointer group"
-                onClick={() => handleNavigation(action.path)}
+                key={feature.path} 
+                className="group cursor-pointer transition-all duration-500 hover:shadow-glow hover:-translate-y-3 border-0 shadow-soft overflow-hidden"
+                onClick={() => navigate(feature.path)}
               >
-                <CardHeader className="pb-4">
-                  <div className="flex items-center justify-between">
-                    <div className={`p-3 rounded-lg ${action.color.replace('bg-', 'bg-')} text-white`}>
-                      <action.icon className="h-6 w-6" />
-                    </div>
-                    <Badge variant="outline" className="text-xs">
-                      {action.badge}
-                    </Badge>
+                <CardContent className="p-0">
+                  <div className={`bg-gradient-to-br ${feature.gradient} p-8 text-white relative overflow-hidden`}>
+                    <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16"></div>
+                    <IconComponent className="w-12 h-12 mb-4 relative z-10 group-hover:scale-110 transition-transform duration-300" />
+                    <h3 className="text-xl font-bold mb-2 relative z-10 font-arabic">
+                      {feature.title}
+                    </h3>
                   </div>
-                </CardHeader>
-                <CardContent className="pt-0">
-                  <h3 className="font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                    {action.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4">
-                    {action.description}
-                  </p>
-                  <div className="flex items-center text-primary text-sm font-medium">
-                    <span className="ml-2">الدخول</span>
-                    <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+                  <div className="p-6">
+                    <p className="text-muted-foreground mb-6 leading-relaxed font-arabic">
+                      {feature.description}
+                    </p>
+                    <Button 
+                      variant="outline" 
+                      className="w-full group-hover:bg-primary group-hover:text-primary-foreground group-hover:border-primary transition-all duration-300 font-arabic"
+                    >
+                      الدخول للقسم ←
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
-            ))}
-          </div>
-        </div>
-
-        {/* Recent Activity */}
-        <Card className="shadow-soft">
-          <CardHeader>
-            <CardTitle className="text-foreground">النشاطات الحديثة</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 p-3 bg-secondary/50 rounded-lg">
-                <div className="p-2 bg-primary/10 rounded-full">
-                  <CalendarCheck className="h-4 w-4 text-primary" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-foreground">تم تسجيل حضور أحمد محمد</p>
-                  <p className="text-xs text-muted-foreground">منذ 5 دقائق</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-4 p-3 bg-secondary/50 rounded-lg">
-                <div className="p-2 bg-accent/10 rounded-full">
-                  <Receipt className="h-4 w-4 text-accent" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-foreground">إضافة مصروف: مواد تنظيف - 150 ريال</p>
-                  <p className="text-xs text-muted-foreground">منذ 15 دقيقة</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center gap-4 p-3 bg-secondary/50 rounded-lg">
-                <div className="p-2 bg-muted/40 rounded-full">
-                  <CreditCard className="h-4 w-4 text-muted-foreground" />
-                </div>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-foreground">دفعة جزئية من العميل سارة أحمد - 500 ريال</p>
-                  <p className="text-xs text-muted-foreground">منذ ساعة</p>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Footer */}
-        <div className="text-center text-sm text-muted-foreground mt-8 pt-8 border-t border-border">
-          <p>© 2024 موريسكو كافيه. جميع الحقوق محفوظة.</p>
-          <p className="mt-1">نظام إدارة احترافي مع ربط كامل بقاعدة البيانات</p>
+            );
+          })}
         </div>
       </div>
-    </div>
+
+      {/* Footer */}
+      <div className="bg-card py-12 mt-16">
+        <div className="container mx-auto px-6 text-center">
+          <div className="flex items-center justify-center mb-4">
+            <Coffee className="w-8 h-8 ml-3 text-primary" />
+            <h3 className="text-2xl font-bold text-card-foreground font-arabic">مور بيريسكو كافيه</h3>
+          </div>
+          <p className="text-muted-foreground font-arabic">
+            نظام إدارة شامل ومتكامل للمقاهي والمطاعم
+          </p>
+        </div>
+      </div>
+    </Layout>
   );
 };
 
